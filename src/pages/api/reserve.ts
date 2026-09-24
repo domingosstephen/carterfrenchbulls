@@ -92,7 +92,7 @@ export const POST: APIRoute = async ({ request }) => {
   const puppyLine = body.puppy ? `Interested in: ${body.puppy}` : 'No specific puppy selected';
 
   const breederEmailHtml = `
-    <h2>New reservation request — Carter French Bulls</h2>
+    <h2>New reservation request: Carter French Bulls</h2>
     <table style="border-collapse:collapse;width:100%;max-width:560px;">
       <tr><td style="padding:8px 12px;font-weight:600;width:140px;">Name</td><td style="padding:8px 12px;">${escHtml(body.name)}</td></tr>
       <tr style="background:#F6EBDD;"><td style="padding:8px 12px;font-weight:600;">Email</td><td style="padding:8px 12px;"><a href="mailto:${escHtml(body.email)}">${escHtml(body.email)}</a></td></tr>
@@ -124,14 +124,14 @@ export const POST: APIRoute = async ({ request }) => {
       resend.emails.send({
         from: fromEmail,
         to: toEmail,
-        subject: `New reservation request from ${body.name}${body.puppy ? ' — ' + body.puppy : ''}`,
+        subject: `New reservation request from ${body.name}${body.puppy ? ': ' + body.puppy : ''}`,
         html: breederEmailHtml,
         replyTo: body.email,
       }),
       resend.emails.send({
         from: fromEmail,
         to: body.email,
-        subject: 'We received your request — Carter French Bulls',
+        subject: 'We received your request | Carter French Bulls',
         html: visitorEmailHtml,
       }),
     ]);

@@ -31,7 +31,7 @@ const canReserve = puppy.status === 'available';
 const offerSchema = {
   '@context': 'https://schema.org',
   '@type': 'Product',
-  name: `${puppy.name} — ${puppy.color} French bulldog puppy`,
+  name: `${puppy.name}, ${puppy.color} French bulldog puppy`,
   description: puppy.note || `${puppy.color} French bulldog puppy, ${puppy.sex}. Ready ${formatDate(puppy.readyDate)}.`,
   image: heroImage ? `${config.siteUrl}${heroImage}` : undefined,
   offers: {
@@ -48,7 +48,7 @@ const offerSchema = {
 ---
 
 <Layout
-  title={`${puppy.name} — ${puppy.color} French bulldog puppy`}
+  title={`${puppy.name} | ${puppy.color} French bulldog puppy`}
   description={puppy.note || `${puppy.name} is a ${puppy.color} French bulldog puppy available from Carter French Bulls. $${puppy.price.toLocaleString('en-US')}.`}
   image={heroImage}
   hasStickyBar={canReserve}

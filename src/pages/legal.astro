@@ -12,7 +12,7 @@ import config from '../../site.config';
     <div class="container">
       <div class="prose">
         <h1>Privacy and terms</h1>
-        <p><em>Last updated: September 2026. PLACEHOLDER — review with a lawyer before launch.</em></p>
+        <p><em>Last updated: September 2026. PLACEHOLDER: review with a lawyer before launch.</em></p>
 
         <h2>Privacy policy</h2>
 
@@ -39,7 +39,7 @@ import config from '../../site.config';
         <h2>Your rights</h2>
         <p>
           You may ask us to delete any personal information you have shared with us.
-          Contact us at {config.email !== '{{EMAIL}}' ? config.email : '[email — to be added]'} and we will
+          Contact us at {config.email !== '{{EMAIL}}' ? config.email : '[email to be added]'} and we will
           respond within a reasonable time.
         </p>
 
@@ -76,7 +76,7 @@ import config from '../../site.config';
           {config.email !== '{{EMAIL}}' ? (
             <a href={`mailto:${config.email}`}>{config.email}</a>
           ) : (
-            '[email — to be added]'
+            '[email to be added]'
           )}.
         </p>
       </div>

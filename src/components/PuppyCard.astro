@@ -40,7 +40,7 @@ const statusLabel = { available: 'Available', reserved: 'Reserved', sold: 'Sold'
   data-status={status}
   data-sex={sex}
   data-color={color.toLowerCase()}
-  aria-label={`${name} — ${statusLabel}. ${sex === 'female' ? 'Female' : 'Male'}, ${color}. $${price.toLocaleString('en-US')}.`}
+  aria-label={`${name}, ${statusLabel}. ${sex === 'female' ? 'Female' : 'Male'}, ${color}. $${price.toLocaleString('en-US')}.`}
 >
   <div class="puppy-card-image-wrap">
     <img
