@@ -1,0 +1,197 @@
+---
+import Layout from '../layouts/Layout.astro';
+import config from '../../site.config';
+---
+
+<Layout
+  title="About"
+  description="Sandy Carter has been breeding French bulldogs at home for over 7 years. Carter French Bulls is a family operation in the USA."
+>
+  <section class="section">
+    <div class="container about-layout">
+      <div class="about-photo-col">
+        <div class="about-photo-wrap">
+          <!-- PLACEHOLDER: Replace with Sandy's photo at public/images/sandy.jpg -->
+          <div class="photo-placeholder" aria-label="Photo of Sandy Carter — placeholder">
+            <svg width="80" height="80" viewBox="0 0 80 80" fill="none" aria-hidden="true">
+              <circle cx="40" cy="32" r="18" stroke="#EADFD0" stroke-width="2" />
+              <path d="M10 76c0-16.569 13.431-30 30-30s30 13.431 30 30" stroke="#EADFD0" stroke-width="2" stroke-linecap="round" />
+            </svg>
+            <p class="photo-placeholder-label">Sandy's photo<br />coming soon</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-text">
+        <h1>About {config.breederName}</h1>
+        <!-- PLACEHOLDER: Replace with Sandy's own words -->
+        <p>
+          Sandy Carter started raising French bulldogs over {config.yearsBreeding} ago — not as a business, but because she fell in love with the breed.
+          What began with a single pair has grown into a small family program where every litter is raised at home, under the same roof.
+        </p>
+        <p>
+          Every puppy spends its first weeks surrounded by family: handled daily, introduced to sounds and routines, and given the kind of early socialization that a kennel setting cannot replicate.
+          By the time a puppy is ready to go home, they are already comfortable around people.
+        </p>
+        <p>
+          {config.kennelName} is a family operation. When you reach out, you speak with Sandy directly.
+          She will answer your questions honestly, including the ones that might make the sale less likely —
+          because placing a puppy in the wrong home is worse than not placing it at all.
+        </p>
+        <p class="about-placeholder-note">
+          <em>Note: This copy is a placeholder written to match Sandy's story as described in the brief.
+          Sandy should replace it with her own words before launch.</em>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-sand">
+    <div class="container">
+      <div class="about-values">
+        <h2>How we raise our puppies</h2>
+        <div class="values-grid">
+          <div class="value-item">
+            <h3>At home, not in a kennel</h3>
+            <p>Every litter is raised inside our home. The puppies grow up with the noise, smells, and rhythms of daily family life — which makes them calmer and more adaptable when they go to yours.</p>
+          </div>
+          <div class="value-item">
+            <h3>Handled from day one</h3>
+            <p>We handle the puppies daily from birth. This early human contact shapes their temperament in ways that cannot be undone or faked later.</p>
+          </div>
+          <div class="value-item">
+            <h3>Health first</h3>
+            <p>We vaccinate, deworm, and microchip every puppy before they leave us. Each puppy is examined by a licensed vet. These are not extras — they are what responsible breeding looks like.</p>
+          </div>
+          <div class="value-item">
+            <h3>Honest conversations</h3>
+            <p>We will tell you if one of our puppies is not the right fit for your home. A French bulldog is a commitment — we want it to go well for you and for the dog.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container cta-row">
+      <div>
+        <h2>Ready to meet a puppy?</h2>
+        <p>Browse our available puppies or send us a message.</p>
+      </div>
+      <div class="cta-buttons">
+        <a href="/puppies" class="btn btn-primary">See available puppies</a>
+        <a href="/contact" class="btn btn-ghost">Contact us</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .about-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  @media (min-width: 768px) {
+    .about-layout {
+      grid-template-columns: 280px 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+  }
+
+  .about-photo-wrap {
+    width: 100%;
+    max-width: 280px;
+    aspect-ratio: 3 / 4;
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    border: 1px solid var(--color-line);
+  }
+
+  .photo-placeholder {
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-sand);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .photo-placeholder-label {
+    font-size: 0.8125rem;
+    color: var(--color-stone);
+    text-align: center;
+    margin: 0;
+  }
+
+  .about-text p {
+    color: var(--color-stone);
+    line-height: 1.7;
+    margin-bottom: 16px;
+    font-size: 1.0625rem;
+  }
+
+  .about-placeholder-note {
+    font-size: 0.8125rem !important;
+    color: var(--color-stone);
+    padding: 12px 16px;
+    background: var(--color-butter);
+    border-radius: 8px;
+    border-left: 3px solid var(--color-marigold);
+  }
+
+  .about-values h2 {
+    margin-bottom: 40px;
+  }
+
+  .values-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  @media (min-width: 640px) {
+    .values-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .value-item h3 {
+    font-size: 1rem;
+    margin-bottom: 8px;
+  }
+
+  .value-item p {
+    color: var(--color-stone);
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  .cta-row {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  @media (min-width: 640px) {
+    .cta-row {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  .cta-row h2 { margin-bottom: 4px; }
+  .cta-row p { color: var(--color-stone); font-size: 1rem; margin: 0; }
+
+  .cta-buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+</style>

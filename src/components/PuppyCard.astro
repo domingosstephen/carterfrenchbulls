@@ -1,0 +1,128 @@
+---
+export interface Props {
+  slug: string;
+  name: string;
+  sex: 'male' | 'female';
+  color: string;
+  birthDate: string;
+  status: 'available' | 'reserved' | 'sold';
+  price: number;
+  gallery: string[];
+  'data-status'?: string;
+  'data-sex'?: string;
+  'data-color'?: string;
+}
+
+const {
+  slug,
+  name,
+  sex,
+  color,
+  birthDate,
+  status,
+  price,
+  gallery,
+} = Astro.props;
+
+const heroImage = gallery[0];
+
+function formatBirthDate(iso: string): string {
+  const d = new Date(iso + 'T00:00:00');
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+const statusLabel = { available: 'Available', reserved: 'Reserved', sold: 'Sold' }[status];
+---
+
+<a
+  href={`/puppies/${slug}`}
+  class="puppy-card card"
+  data-status={status}
+  data-sex={sex}
+  data-color={color.toLowerCase()}
+  aria-label={`${name} — ${statusLabel}. ${sex === 'female' ? 'Female' : 'Male'}, ${color}. $${price.toLocaleString('en-US')}.`}
+>
+  <div class="puppy-card-image-wrap">
+    <img
+      src={heroImage}
+      alt={`${name}, a ${color} French bulldog puppy`}
+      class="puppy-card-image"
+      width="400"
+      height="500"
+      loading="lazy"
+      decoding="async"
+    />
+    <span class={`pill pill-${status} puppy-card-pill`}>{statusLabel}</span>
+  </div>
+
+  <div class="puppy-card-body">
+    <h3 class="puppy-card-name">{name}</h3>
+    <p class="puppy-card-meta">
+      {sex === 'female' ? 'Female' : 'Male'} · {color} · Born {formatBirthDate(birthDate)}
+    </p>
+    <p class="puppy-card-price">${price.toLocaleString('en-US')}</p>
+  </div>
+</a>
+
+<style>
+  .puppy-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .puppy-card[data-status="sold"] {
+    opacity: 0.7;
+  }
+
+  .puppy-card-image-wrap {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: var(--radius-card) var(--radius-card) 0 0;
+    background-color: var(--color-sand);
+  }
+
+  .puppy-card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 400ms ease-out;
+  }
+
+  .puppy-card:hover .puppy-card-image {
+    transform: scale(1.03);
+  }
+
+  .puppy-card-pill {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+  }
+
+  .puppy-card-body {
+    padding: 16px 20px 20px;
+  }
+
+  .puppy-card-name {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-ink);
+    margin-bottom: 4px;
+  }
+
+  .puppy-card-meta {
+    font-size: 0.875rem;
+    color: var(--color-stone);
+    margin-bottom: 8px;
+  }
+
+  .puppy-card-price {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-ink);
+    margin: 0;
+  }
+</style>

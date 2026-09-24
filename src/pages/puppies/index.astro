@@ -1,0 +1,111 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PuppyCard from '../../components/PuppyCard.astro';
+import PuppyFilters from '../../components/PuppyFilters.astro';
+import { getCollection } from 'astro:content';
+
+const allPuppies = await getCollection('puppies');
+
+// Sort: available first, then reserved, then sold
+const order = { available: 0, reserved: 1, sold: 2 };
+const puppies = [...allPuppies].sort((a, b) => order[a.data.status] - order[b.data.status]);
+
+// Unique colors for filter chips
+const colors = [...new Set(puppies.map((p) => p.data.color))].sort();
+---
+
+<Layout
+  title="Available puppies"
+  description="Browse our available French bulldog puppies. Every puppy is vaccinated, dewormed, microchipped, and vet-checked. $1,200 each."
+>
+  <section class="section">
+    <div class="container">
+      <div class="page-header">
+        <h1>Puppies</h1>
+        <p class="page-sub">
+          Every puppy below comes vaccinated, dewormed, microchipped, and vet-checked.
+          Filter by status, sex, or color.
+        </p>
+      </div>
+
+      <PuppyFilters colors={colors} />
+
+      {puppies.length > 0 ? (
+        <div class="puppy-grid" id="puppy-grid">
+          {puppies.map((p) => (
+            <PuppyCard
+              slug={p.id}
+              name={p.data.name}
+              sex={p.data.sex}
+              color={p.data.color}
+              birthDate={p.data.birthDate}
+              status={p.data.status}
+              price={p.data.price}
+              gallery={p.data.gallery}
+            />
+          ))}
+        </div>
+      ) : (
+        <div class="empty-state">
+          <p class="empty-title">No puppies listed yet.</p>
+          <p class="empty-body">
+            New litters come along regularly. <a href="/contact">Join the waiting list</a> and we will reach out when a puppy becomes available.
+          </p>
+        </div>
+      )}
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .page-header {
+    margin-bottom: 32px;
+  }
+
+  .page-sub {
+    color: var(--color-stone);
+    font-size: 1.0625rem;
+    max-width: 52ch;
+    margin: 0;
+  }
+
+  .puppy-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  @media (min-width: 640px) {
+    .puppy-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .puppy-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .empty-state {
+    padding: 64px 0;
+    text-align: center;
+  }
+
+  .empty-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-ink);
+    margin-bottom: 8px;
+  }
+
+  .empty-body {
+    color: var(--color-stone);
+    font-size: 1rem;
+  }
+
+  .empty-body a {
+    color: var(--color-ink);
+    text-underline-offset: 3px;
+  }
+</style>

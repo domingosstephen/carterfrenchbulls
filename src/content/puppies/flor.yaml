@@ -1,0 +1,21 @@
+name: Flor
+sex: female
+color: Black pied
+birthDate: "2026-07-20"
+readyDate: "2026-09-20"
+status: available
+price: 1200
+gallery:
+  - /images/puppies/flor/flor-1.jpg
+  - /images/puppies/flor/flor-2.jpg
+  - /images/puppies/flor/flor-3.jpg
+  - /images/puppies/flor/flor-4.jpg
+  - /images/puppies/flor/flor-5.jpg
+  - /images/puppies/flor/flor-6.jpg
+  - /images/puppies/flor/flor-7.jpg
+  - /images/puppies/flor/flor-8.jpg
+note: "Flor is a playful, curious girl with a big personality. She loves exploring and is very affectionate."
+vetExamDate: "2026-09-05"
+vaccinationDate: "2026-08-25"
+dewormingDate: "2026-08-05"
+healthCertificateAvailable: true

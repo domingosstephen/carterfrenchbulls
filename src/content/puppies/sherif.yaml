@@ -1,0 +1,21 @@
+name: Sherif
+sex: male
+color: Blue merle
+birthDate: "2026-07-22"
+readyDate: "2026-09-22"
+status: available
+price: 1200
+gallery:
+  - /images/puppies/sherif/sherif-1.jpg
+  - /images/puppies/sherif/sherif-2.jpg
+  - /images/puppies/sherif/sherif-3.jpg
+  - /images/puppies/sherif/sherif-4.jpg
+  - /images/puppies/sherif/sherif-5.jpg
+  - /images/puppies/sherif/sherif-6.jpg
+  - /images/puppies/sherif/sherif-7.jpg
+  - /images/puppies/sherif/sherif-8.jpg
+note: "Sherif is a one-of-a-kind blue merle boy with striking markings. He is sweet-natured and loves attention."
+vetExamDate: "2026-09-07"
+vaccinationDate: "2026-08-28"
+dewormingDate: "2026-08-08"
+healthCertificateAvailable: true

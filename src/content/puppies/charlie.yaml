@@ -1,0 +1,19 @@
+name: Charlie
+sex: male
+color: Cream
+birthDate: "2026-07-15"
+readyDate: "2026-09-15"
+status: available
+price: 1200
+gallery:
+  - /images/puppies/charlie/charlie-1.jpg
+  - /images/puppies/charlie/charlie-2.jpg
+  - /images/puppies/charlie/charlie-3.jpg
+  - /images/puppies/charlie/charlie-4.jpg
+  - /images/puppies/charlie/charlie-5.jpg
+  - /images/puppies/charlie/charlie-6.jpg
+note: "Charlie is a calm, gentle boy who loves to cuddle. He is great with children and other pets."
+vetExamDate: "2026-09-01"
+vaccinationDate: "2026-08-20"
+dewormingDate: "2026-08-01"
+healthCertificateAvailable: true

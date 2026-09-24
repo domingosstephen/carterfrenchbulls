@@ -1,0 +1,221 @@
+---
+import Layout from '../layouts/Layout.astro';
+import HowItWorks from '../components/HowItWorks.astro';
+import config from '../../site.config';
+
+const faqs = [
+  {
+    q: 'How quickly do you reply?',
+    a: `We reply ${config.responseTime !== '{{RESPONSE_TIME}}' ? config.responseTime : 'as soon as we can'}. If you send a message over a weekend, expect a reply by Monday morning.`,
+  },
+  {
+    q: 'Do I have to pay before the video call?',
+    a: 'No. The video call comes first, always. We never ask for money before you have seen your puppy live on screen and had your questions answered.',
+  },
+  {
+    q: 'What does the deposit hold?',
+    a: `The deposit takes the puppy off the market while we prepare the paperwork. ${config.deposit !== '{{DEPOSIT}}' ? 'It is ' + config.deposit + '.' : 'The amount will be confirmed during your video call.'} Once you sign the agreement, we count down the days until your puppy comes home.`,
+  },
+  {
+    q: 'What is in the purchase agreement?',
+    a: 'The agreement covers the price, what is included (the six health items), the deposit amount, the delivery or pickup date, and both of our responsibilities. Nothing is hidden.',
+  },
+  {
+    q: 'What if the puppy I love gets reserved before I reach out?',
+    a: 'New litters happen regularly. If the puppy you like is gone, send us a message with what you are looking for and we will keep you in mind for the next litter.',
+  },
+];
+---
+
+<Layout
+  title="How it works"
+  description="Reserving a puppy from Carter French Bulls is a simple four-step process. No surprises, no pressure."
+>
+  <section class="section">
+    <div class="container">
+      <div class="page-intro">
+        <h1>How it works</h1>
+        <p>
+          Four steps from first message to puppy at home.
+          You are in control the whole way, and nothing is asked of you before you are ready.
+        </p>
+      </div>
+
+      <div class="hiw-layout">
+        <HowItWorks />
+
+        <div class="hiw-aside">
+          <div class="hiw-aside-box">
+            <h3>Before you send money</h3>
+            <p>
+              We schedule a video call so you can see your puppy in real time.
+              No exceptions. This protects you from scams and helps us make sure
+              our puppy is going to the right home.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-sand">
+    <div class="container">
+      <h2>Questions about the process</h2>
+      <div class="faq-list">
+        {faqs.map((faq, i) => (
+          <div class="faq-item">
+            <button
+              class="faq-trigger"
+              aria-expanded="false"
+              aria-controls={`faq-a-${i}`}
+              id={`faq-q-${i}`}
+            >
+              <span>{faq.q}</span>
+              <svg class="faq-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+            <div class="faq-answer" id={`faq-a-${i}`} role="region" aria-labelledby={`faq-q-${i}`} hidden>
+              <p>{faq.a}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container cta-row">
+      <div>
+        <h2>Ready to start?</h2>
+        <p>Browse our available puppies and send us a short message.</p>
+      </div>
+      <a href="/puppies" class="btn btn-primary">See available puppies</a>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .page-intro {
+    max-width: 56ch;
+    margin-bottom: 56px;
+  }
+
+  .page-intro p {
+    color: var(--color-stone);
+    font-size: 1.0625rem;
+  }
+
+  .hiw-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  @media (min-width: 768px) {
+    .hiw-layout {
+      grid-template-columns: 1fr 320px;
+      gap: 80px;
+      align-items: start;
+    }
+  }
+
+  .hiw-aside-box {
+    padding: 28px;
+    background: var(--color-butter);
+    border-radius: var(--radius-card);
+    border: 1px solid var(--color-line);
+  }
+
+  .hiw-aside-box h3 {
+    font-size: 1rem;
+    margin-bottom: 10px;
+  }
+
+  .hiw-aside-box p {
+    font-size: 0.9375rem;
+    color: var(--color-stone);
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  .faq-list {
+    max-width: 720px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .faq-item {
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .faq-trigger {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--color-ink);
+    min-height: 48px;
+  }
+
+  .faq-trigger:hover { color: var(--color-stone); }
+
+  .faq-icon {
+    flex-shrink: 0;
+    transition: transform 200ms ease-out;
+    color: var(--color-stone);
+  }
+
+  .faq-trigger[aria-expanded="true"] .faq-icon {
+    transform: rotate(180deg);
+  }
+
+  .faq-answer {
+    padding-bottom: 20px;
+  }
+
+  .faq-answer p {
+    color: var(--color-stone);
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+
+  .cta-row {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  @media (min-width: 640px) {
+    .cta-row {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  .cta-row h2 { margin-bottom: 4px; }
+  .cta-row p { color: var(--color-stone); font-size: 1rem; margin: 0; }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.faq-trigger').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const expanded = btn.getAttribute('aria-expanded') === 'true';
+      const answerId = btn.getAttribute('aria-controls')!;
+      const answer = document.getElementById(answerId);
+      btn.setAttribute('aria-expanded', String(!expanded));
+      if (answer) answer.hidden = expanded;
+    });
+  });
+</script>

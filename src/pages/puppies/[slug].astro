@@ -1,0 +1,468 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import HealthBlock from '../../components/HealthBlock.astro';
+import { getCollection, getEntry } from 'astro:content';
+import config from '../../../site.config';
+
+export async function getStaticPaths() {
+  const puppies = await getCollection('puppies');
+  return puppies.map((p) => ({ params: { slug: p.id } }));
+}
+
+const { slug } = Astro.params;
+const entry = await getEntry('puppies', slug);
+
+if (!entry) {
+  return Astro.redirect('/puppies');
+}
+
+const puppy = entry.data;
+
+function formatDate(iso: string): string {
+  const d = new Date(iso + 'T00:00:00');
+  return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+}
+
+const statusLabel = { available: 'Available', reserved: 'Reserved', sold: 'Sold' }[puppy.status];
+const heroImage = puppy.gallery[0];
+const canReserve = puppy.status === 'available';
+
+// Offer schema for this puppy
+const offerSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: `${puppy.name} — ${puppy.color} French bulldog puppy`,
+  description: puppy.note || `${puppy.color} French bulldog puppy, ${puppy.sex}. Ready ${formatDate(puppy.readyDate)}.`,
+  image: heroImage ? `${config.siteUrl}${heroImage}` : undefined,
+  offers: {
+    '@type': 'Offer',
+    price: puppy.price,
+    priceCurrency: config.currency,
+    availability: puppy.status === 'available'
+      ? 'https://schema.org/InStock'
+      : puppy.status === 'reserved'
+      ? 'https://schema.org/PreOrder'
+      : 'https://schema.org/SoldOut',
+  },
+};
+---
+
+<Layout
+  title={`${puppy.name} — ${puppy.color} French bulldog puppy`}
+  description={puppy.note || `${puppy.name} is a ${puppy.color} French bulldog puppy available from Carter French Bulls. $${puppy.price.toLocaleString('en-US')}.`}
+  image={heroImage}
+  hasStickyBar={canReserve}
+>
+  <slot slot="head" name="head">
+    <script type="application/ld+json" set:html={JSON.stringify(offerSchema)} />
+  </slot>
+
+  <div class="puppy-page">
+    <!-- Gallery -->
+    <section class="gallery-section" aria-label={`Photos of ${puppy.name}`}>
+      <div class="gallery-rail" id="gallery-rail">
+        {puppy.gallery.map((src, i) => (
+          <div class="gallery-slide">
+            <img
+              src={src}
+              alt={`${puppy.name}, photo ${i + 1} of ${puppy.gallery.length}`}
+              class={i === 0 ? 'gallery-img hero-image' : 'gallery-img'}
+              width="800"
+              height="1000"
+              loading={i === 0 ? 'eager' : 'lazy'}
+              decoding={i === 0 ? 'sync' : 'async'}
+            />
+          </div>
+        ))}
+        {puppy.video && (
+          <div class="gallery-slide">
+            <video
+              src={puppy.video}
+              class="gallery-img"
+              muted
+              playsinline
+              loop
+              controls
+              preload="none"
+              aria-label={`Video of ${puppy.name}`}
+              style="cursor:pointer"
+            />
+          </div>
+        )}
+      </div>
+
+      <!-- Dots -->
+      {puppy.gallery.length > 1 && (
+        <div class="gallery-dots" role="tablist" aria-label="Gallery photos" id="gallery-dots">
+          {puppy.gallery.map((_, i) => (
+            <button
+              class={`gallery-dot ${i === 0 ? 'gallery-dot--active' : ''}`}
+              role="tab"
+              aria-selected={i === 0}
+              aria-label={`Photo ${i + 1}`}
+              data-index={i}
+            />
+          ))}
+        </div>
+      )}
+
+      <!-- Lightbox hint -->
+      <p class="gallery-hint">Tap a photo to enlarge</p>
+    </section>
+
+    <!-- Details -->
+    <div class="container puppy-details">
+      <div class="puppy-main">
+        <div class="puppy-title-row">
+          <div>
+            <h1 class="puppy-name">{puppy.name}</h1>
+            <p class="puppy-meta">
+              {puppy.sex === 'female' ? 'Female' : 'Male'} · {puppy.color}
+              · Born {formatDate(puppy.birthDate)}
+              · Ready {formatDate(puppy.readyDate)}
+            </p>
+          </div>
+          <div class="puppy-price-status">
+            <span class={`pill pill-${puppy.status}`}>{statusLabel}</span>
+            <p class="puppy-price">${puppy.price.toLocaleString('en-US')}</p>
+          </div>
+        </div>
+
+        {puppy.note && (
+          <p class="puppy-note">{puppy.note}</p>
+        )}
+
+        <!-- Health block with real dates -->
+        <div class="puppy-health">
+          <HealthBlock puppy={puppy} showCta={false} showPrice={false} />
+        </div>
+
+        <!-- Reserve CTA (desktop) -->
+        {canReserve && (
+          <div class="puppy-cta-desktop">
+            <a href={`/contact?puppy=${slug}#reserve`} class="btn btn-primary">
+              Reserve {puppy.name}
+            </a>
+            {config.phone !== '{{PHONE}}' && (
+              <a href={`tel:${config.phone.replace(/\D/g, '')}`} class="btn btn-ghost">
+                Text or call us
+              </a>
+            )}
+          </div>
+        )}
+
+        {!canReserve && puppy.status === 'reserved' && (
+          <div class="puppy-reserved-note">
+            <p>{puppy.name} is reserved. <a href="/puppies">See other available puppies</a>, or <a href="/contact">join the waiting list</a>.</p>
+          </div>
+        )}
+
+        {!canReserve && puppy.status === 'sold' && (
+          <div class="puppy-reserved-note">
+            <p>{puppy.name} has found a home. <a href="/puppies">See other available puppies</a>.</p>
+          </div>
+        )}
+
+        <!-- Back link -->
+        <div class="puppy-back">
+          <a href="/puppies" class="back-link">← Back to all puppies</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sticky bottom bar (mobile only) -->
+  {canReserve && (
+    <div class="sticky-bar" aria-label="Reserve actions">
+      <a href={`/contact?puppy=${slug}#reserve`} class="btn btn-primary" style="flex:1;justify-content:center">
+        Reserve {puppy.name}
+      </a>
+      {config.phone !== '{{PHONE}}' && (
+        <a href={`tel:${config.phone.replace(/\D/g, '')}`} class="btn btn-ghost" style="white-space:nowrap">
+          Text us
+        </a>
+      )}
+    </div>
+  )}
+</Layout>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" aria-modal="true" role="dialog" aria-label="Photo lightbox" hidden>
+  <button class="lightbox-close" id="lightbox-close" aria-label="Close lightbox">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <line x1="4" y1="4" x2="20" y2="20" stroke="white" stroke-width="2" stroke-linecap="round" />
+      <line x1="20" y1="4" x2="4" y2="20" stroke="white" stroke-width="2" stroke-linecap="round" />
+    </svg>
+  </button>
+  <img class="lightbox-img" id="lightbox-img" src="" alt="" />
+</div>
+
+<style>
+  .puppy-page {
+    min-height: 60vh;
+  }
+
+  /* Gallery */
+  .gallery-section {
+    background: var(--color-ink);
+    position: relative;
+  }
+
+  .gallery-rail {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    max-height: 70svh;
+  }
+
+  .gallery-rail::-webkit-scrollbar {
+    display: none;
+  }
+
+  .gallery-slide {
+    flex-shrink: 0;
+    width: 100%;
+    scroll-snap-align: start;
+  }
+
+  .gallery-img {
+    width: 100%;
+    height: 70svh;
+    object-fit: contain;
+    display: block;
+    cursor: zoom-in;
+  }
+
+  .gallery-dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    padding: 12px;
+  }
+
+  .gallery-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.4);
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: background 200ms;
+    min-height: unset;
+  }
+
+  .gallery-dot--active {
+    background: white;
+  }
+
+  .gallery-hint {
+    text-align: center;
+    font-size: 0.8125rem;
+    color: rgba(255,255,255,0.5);
+    padding-bottom: 8px;
+    margin: 0;
+  }
+
+  /* Details */
+  .puppy-details {
+    padding-top: 40px;
+    padding-bottom: 64px;
+  }
+
+  .puppy-main {
+    max-width: 720px;
+  }
+
+  .puppy-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+
+  .puppy-name {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    margin-bottom: 6px;
+  }
+
+  .puppy-meta {
+    font-size: 0.9375rem;
+    color: var(--color-stone);
+    margin: 0;
+  }
+
+  .puppy-price-status {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+  }
+
+  .puppy-price {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-ink);
+    margin: 0;
+  }
+
+  .puppy-note {
+    font-size: 1.0625rem;
+    color: var(--color-stone);
+    line-height: 1.65;
+    margin-bottom: 32px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .puppy-health {
+    margin-bottom: 32px;
+  }
+
+  .puppy-cta-desktop {
+    display: none;
+    gap: 12px;
+    margin-top: 32px;
+  }
+
+  @media (min-width: 768px) {
+    .puppy-cta-desktop {
+      display: flex;
+    }
+  }
+
+  .puppy-reserved-note {
+    margin-top: 24px;
+    padding: 20px 24px;
+    background: var(--color-sand);
+    border-radius: var(--radius-input);
+    border: 1px solid var(--color-line);
+  }
+
+  .puppy-reserved-note p {
+    margin: 0;
+    color: var(--color-stone);
+    font-size: 0.9375rem;
+  }
+
+  .puppy-reserved-note a {
+    color: var(--color-ink);
+  }
+
+  .puppy-back {
+    margin-top: 40px;
+    padding-top: 32px;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .back-link {
+    color: var(--color-stone);
+    text-decoration: none;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    text-underline-offset: 3px;
+  }
+
+  .back-link:hover {
+    text-decoration: underline;
+    color: var(--color-ink);
+  }
+
+  /* Lightbox */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.92);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lightbox[hidden] {
+    display: none;
+  }
+
+  .lightbox-img {
+    max-width: 90vw;
+    max-height: 90svh;
+    object-fit: contain;
+    border-radius: 8px;
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 48px;
+    height: 48px;
+    border: none;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+</style>
+
+<script>
+  // Gallery dots sync with scroll
+  const rail = document.getElementById('gallery-rail');
+  const dots = document.querySelectorAll<HTMLButtonElement>('.gallery-dot');
+
+  function updateDots(index: number) {
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('gallery-dot--active', i === index);
+      dot.setAttribute('aria-selected', String(i === index));
+    });
+  }
+
+  dots.forEach((dot) => {
+    dot.addEventListener('click', () => {
+      const index = Number(dot.dataset.index);
+      if (rail) {
+        rail.scrollTo({ left: index * rail.clientWidth, behavior: 'smooth' });
+      }
+    });
+  });
+
+  rail?.addEventListener('scroll', () => {
+    if (!rail) return;
+    const index = Math.round(rail.scrollLeft / rail.clientWidth);
+    updateDots(index);
+  });
+
+  // Lightbox
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img') as HTMLImageElement | null;
+  const lightboxClose = document.getElementById('lightbox-close');
+
+  document.querySelectorAll<HTMLImageElement>('.gallery-img').forEach((img) => {
+    img.addEventListener('click', () => {
+      if (!lightbox || !lightboxImg) return;
+      lightboxImg.src = img.src;
+      lightboxImg.alt = img.alt;
+      lightbox.hidden = false;
+      lightboxClose?.focus();
+    });
+  });
+
+  function closeLightbox() {
+    if (lightbox) lightbox.hidden = true;
+  }
+
+  lightboxClose?.addEventListener('click', closeLightbox);
+  lightbox?.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeLightbox();
+  });
+</script>

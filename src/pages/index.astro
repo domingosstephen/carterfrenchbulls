@@ -1,0 +1,484 @@
+---
+import Layout from '../layouts/Layout.astro';
+import HealthBlock from '../components/HealthBlock.astro';
+import HowItWorks from '../components/HowItWorks.astro';
+import PuppyCard from '../components/PuppyCard.astro';
+import { getCollection } from 'astro:content';
+import config from '../../site.config';
+
+const allPuppies = await getCollection('puppies');
+const featuredPuppies = allPuppies
+  .filter((p) => p.data.status !== 'sold')
+  .slice(0, 3);
+
+// FAQ items
+const faqs = [
+  {
+    q: 'Do you ship to Canada?',
+    a: 'Yes. We work with families in both the USA and Canada. Import and delivery requirements vary by province and state — we will walk you through the details on our video call.',
+  },
+  {
+    q: 'How do I know the puppies are healthy?',
+    a: 'Every puppy is examined by a licensed vet, vaccinated, dewormed, and microchipped before going home. A health certificate is available on request.',
+  },
+  {
+    q: 'Do I have to put money down before I see the puppy?',
+    a: 'No. We schedule a video call first so you can meet the puppy in real time. Only after the call do we move to a deposit to hold your puppy.',
+  },
+  {
+    q: 'What does the $1,200 price include?',
+    a: 'Vaccination, deworming, microchip, health certificate, registration, and a vet exam. Nothing extra to pay at pickup for those items.',
+  },
+  {
+    q: 'How can I protect myself from puppy scams?',
+    a: 'We never ask for money before a video call. We will never ask you to send payment via gift card or wire transfer without a signed agreement. If anything feels off, trust your instincts and call us.',
+  },
+  {
+    q: 'How long has Carter French Bulls been breeding?',
+    a: `Sandy Carter and her family have been breeding and raising French bulldogs for over ${config.yearsBreeding} years. Every litter is raised at home with daily attention and socialization.`,
+  },
+];
+---
+
+<Layout>
+  <!-- Hero -->
+  <section class="hero section">
+    <div class="container hero-inner">
+      <div class="hero-text">
+        <h1>Healthy French bulldog puppies for loving homes in the USA and Canada</h1>
+        <p class="hero-sub">
+          Family-bred by Sandy Carter for over {config.yearsBreeding} years.
+          Real puppies, real health records, a fair price.
+        </p>
+        <div class="hero-actions">
+          <a href="/puppies" class="btn btn-primary">See available puppies</a>
+          <a href="/how-it-works" class="btn-text-link">How it works</a>
+        </div>
+      </div>
+      <div class="hero-image-wrap">
+        <img
+          src="/images/puppies/loki/loki-1.jpg"
+          alt="A French bulldog puppy looking at the camera"
+          class="hero-image"
+          width="600"
+          height="750"
+          fetchpriority="high"
+          decoding="sync"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- Available puppies preview -->
+  {featuredPuppies.length > 0 && (
+    <section class="section bg-sand">
+      <div class="container">
+        <div class="section-header">
+          <h2>Available puppies</h2>
+          <a href="/puppies" class="see-all-link">See all</a>
+        </div>
+        <div class="puppy-grid">
+          {featuredPuppies.map((p) => (
+            <PuppyCard
+              slug={p.id}
+              name={p.data.name}
+              sex={p.data.sex}
+              color={p.data.color}
+              birthDate={p.data.birthDate}
+              status={p.data.status}
+              price={p.data.price}
+              gallery={p.data.gallery}
+            />
+          ))}
+        </div>
+        <div class="section-cta">
+          <a href="/puppies" class="btn btn-ghost">See all puppies</a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Health block -->
+  <section class="section">
+    <div class="container">
+      <HealthBlock showCta={true} showPrice={true} />
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="section bg-sand">
+    <div class="container">
+      <div class="two-col">
+        <div>
+          <h2>How it works</h2>
+          <p class="section-sub">No surprises. No pressure. You are in control the whole way.</p>
+        </div>
+        <HowItWorks />
+      </div>
+    </div>
+  </section>
+
+  <!-- Meet the breeder -->
+  <section class="section">
+    <div class="container">
+      <div class="breeder-block">
+        <div class="breeder-photo-wrap">
+          <div class="breeder-photo-placeholder" aria-label="Photo of Sandy Carter">
+            <!-- PLACEHOLDER: Add Sandy's photo to public/images/sandy.jpg -->
+            <div class="breeder-photo-fallback">
+              <svg width="64" height="64" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+                <circle cx="32" cy="26" r="14" stroke="#EADFD0" stroke-width="2" />
+                <path d="M8 58c0-13.255 10.745-24 24-24s24 10.745 24 24" stroke="#EADFD0" stroke-width="2" stroke-linecap="round" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="breeder-text">
+          <h2>Meet {config.breederName}</h2>
+          <p>
+            Sandy Carter has spent over {config.yearsBreeding} years raising French bulldogs at home — not in a kennel. Every litter grows up with the family: handled, socialized, and loved from day one.
+          </p>
+          <p>
+            When you contact us, you speak directly with Sandy. There is no middleman, no auction site. Just an honest conversation about whether one of our puppies is the right fit for your home.
+          </p>
+          <a href="/about" class="btn btn-ghost">More about us</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Delivery -->
+  <section class="section bg-sand">
+    <div class="container">
+      <div class="delivery-block">
+        <div>
+          <h2>Delivery in the USA and Canada</h2>
+          <p>
+            {config.deliveryOptions !== '{{DELIVERY_OPTIONS}}'
+              ? config.deliveryOptions + ' — we will confirm the options that work for your location.'
+              : 'We will discuss pickup and delivery options with you directly. Rules and costs vary by state and province, and we want to give you accurate information rather than a generic answer.'}
+          </p>
+          <a href="/delivery" class="btn btn-ghost">Delivery details</a>
+        </div>
+        <div class="delivery-map-placeholder" aria-hidden="true">
+          <svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg" role="presentation">
+            <rect width="200" height="120" rx="12" fill="#EADFD0" />
+            <text x="100" y="65" text-anchor="middle" fill="#6E625A" font-size="12" font-family="sans-serif">USA &amp; Canada</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section">
+    <div class="container">
+      <h2>Questions</h2>
+      <div class="faq-list">
+        {faqs.map((faq, i) => (
+          <div class="faq-item" id={`faq-${i}`}>
+            <button
+              class="faq-trigger"
+              aria-expanded="false"
+              aria-controls={`faq-answer-${i}`}
+              id={`faq-btn-${i}`}
+            >
+              <span>{faq.q}</span>
+              <svg class="faq-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+            <div class="faq-answer" id={`faq-answer-${i}`} role="region" aria-labelledby={`faq-btn-${i}`} hidden>
+              <p>{faq.a}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Bottom CTA -->
+  <section class="section bg-sand">
+    <div class="container cta-section">
+      <h2>Ready to meet your puppy?</h2>
+      <p>Send us a short message and we will be in touch to set up a video call.</p>
+      <a href="/contact#reserve" class="btn btn-primary">Send a request</a>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* Hero */
+  .hero {
+    padding-top: 48px;
+    padding-bottom: 0;
+  }
+
+  .hero-inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    align-items: center;
+  }
+
+  @media (min-width: 768px) {
+    .hero-inner {
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      padding-bottom: 64px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .hero-inner {
+      gap: 96px;
+    }
+  }
+
+  .hero-sub {
+    font-size: 1.0625rem;
+    color: var(--color-stone);
+    margin-bottom: 32px;
+    max-width: 44ch;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .btn-text-link {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .hero-image-wrap {
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+  }
+
+  .hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Sections */
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 32px;
+  }
+
+  .section-header h2 {
+    margin: 0;
+  }
+
+  .see-all-link {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--color-stone);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .puppy-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  @media (min-width: 640px) {
+    .puppy-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .puppy-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .section-cta {
+    margin-top: 32px;
+    text-align: center;
+  }
+
+  .section-sub {
+    color: var(--color-stone);
+    font-size: 1rem;
+    margin-bottom: 32px;
+    max-width: 42ch;
+  }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  @media (min-width: 768px) {
+    .two-col {
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+  }
+
+  /* Breeder block */
+  .breeder-block {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    align-items: center;
+  }
+
+  @media (min-width: 768px) {
+    .breeder-block {
+      grid-template-columns: 280px 1fr;
+      gap: 64px;
+    }
+  }
+
+  .breeder-photo-wrap {
+    width: 100%;
+    max-width: 280px;
+    aspect-ratio: 3 / 4;
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    border: 1px solid var(--color-line);
+  }
+
+  .breeder-photo-placeholder {
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-sand);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .breeder-text p {
+    color: var(--color-stone);
+    margin-bottom: 16px;
+  }
+
+  /* Delivery */
+  .delivery-block {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  @media (min-width: 768px) {
+    .delivery-block {
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+  }
+
+  .delivery-block p {
+    color: var(--color-stone);
+    margin-bottom: 24px;
+  }
+
+  .delivery-map-placeholder {
+    border-radius: var(--radius-card);
+    overflow: hidden;
+  }
+
+  .delivery-map-placeholder svg {
+    display: block;
+    width: 100%;
+  }
+
+  /* FAQ */
+  .faq-list {
+    max-width: 720px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .faq-item {
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .faq-trigger {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--color-ink);
+    min-height: 48px;
+  }
+
+  .faq-trigger:hover {
+    color: var(--color-stone);
+  }
+
+  .faq-icon {
+    flex-shrink: 0;
+    transition: transform 200ms ease-out;
+    color: var(--color-stone);
+  }
+
+  .faq-trigger[aria-expanded="true"] .faq-icon {
+    transform: rotate(180deg);
+  }
+
+  .faq-answer {
+    padding-bottom: 20px;
+  }
+
+  .faq-answer p {
+    color: var(--color-stone);
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+
+  /* Bottom CTA */
+  .cta-section {
+    text-align: center;
+  }
+
+  .cta-section p {
+    color: var(--color-stone);
+    margin-bottom: 24px;
+    max-width: 100%;
+    font-size: 1.0625rem;
+  }
+</style>
+
+<script>
+  // FAQ accordion
+  document.querySelectorAll<HTMLButtonElement>('.faq-trigger').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const expanded = btn.getAttribute('aria-expanded') === 'true';
+      const answerId = btn.getAttribute('aria-controls');
+      const answer = answerId ? document.getElementById(answerId) : null;
+
+      btn.setAttribute('aria-expanded', String(!expanded));
+      if (answer) answer.hidden = expanded;
+    });
+  });
+</script>

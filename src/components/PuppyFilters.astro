@@ -1,0 +1,137 @@
+---
+export interface Props {
+  colors: string[];
+}
+
+const { colors } = Astro.props;
+---
+
+<div class="filters" role="group" aria-label="Filter puppies">
+  <!-- Status filter -->
+  <div class="filter-group">
+    <button class="filter-chip active" data-filter="status" data-value="available" aria-pressed="true">
+      Available
+    </button>
+    <button class="filter-chip" data-filter="status" data-value="all" aria-pressed="false">
+      All
+    </button>
+    <button class="filter-chip" data-filter="status" data-value="reserved" aria-pressed="false">
+      Reserved
+    </button>
+  </div>
+
+  <!-- Sex filter -->
+  <div class="filter-group">
+    <button class="filter-chip" data-filter="sex" data-value="all" aria-pressed="true">
+      Any sex
+    </button>
+    <button class="filter-chip" data-filter="sex" data-value="male" aria-pressed="false">
+      Male
+    </button>
+    <button class="filter-chip" data-filter="sex" data-value="female" aria-pressed="false">
+      Female
+    </button>
+  </div>
+
+  <!-- Color filter -->
+  {colors.length > 1 && (
+    <div class="filter-group">
+      <button class="filter-chip active" data-filter="color" data-value="all" aria-pressed="true">
+        Any color
+      </button>
+      {colors.map((c) => (
+        <button class="filter-chip" data-filter="color" data-value={c.toLowerCase()} aria-pressed="false">
+          {c}
+        </button>
+      ))}
+    </div>
+  )}
+
+  <p class="filter-result-count" id="filter-count" aria-live="polite" aria-atomic="true"></p>
+</div>
+
+<style>
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    align-items: center;
+    margin-bottom: 32px;
+  }
+
+  .filter-group {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .filter-group + .filter-group {
+    padding-left: 12px;
+    border-left: 1px solid var(--color-line);
+  }
+
+  .filter-result-count {
+    font-size: 0.875rem;
+    color: var(--color-stone);
+    margin: 0;
+    padding-left: 4px;
+  }
+</style>
+
+<script>
+  // Filter state
+  const state: Record<string, string> = {
+    status: 'available',
+    sex: 'all',
+    color: 'all',
+  };
+
+  const cards = document.querySelectorAll<HTMLElement>('[data-status]');
+  const countEl = document.getElementById('filter-count');
+
+  function applyFilters() {
+    let visible = 0;
+    cards.forEach((card) => {
+      const matchStatus =
+        state.status === 'all' || card.dataset.status === state.status;
+      const matchSex =
+        state.sex === 'all' || card.dataset.sex === state.sex;
+      const matchColor =
+        state.color === 'all' ||
+        card.dataset.color?.includes(state.color) ||
+        false;
+
+      const show = matchStatus && matchSex && matchColor;
+      card.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+
+    if (countEl) {
+      countEl.textContent = visible === cards.length
+        ? ''
+        : `${visible} ${visible === 1 ? 'puppy' : 'puppies'} shown`;
+    }
+  }
+
+  document.querySelectorAll<HTMLButtonElement>('.filter-chip').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const filter = btn.dataset.filter!;
+      const value = btn.dataset.value!;
+
+      state[filter] = value;
+
+      // Update aria-pressed and .active in this group
+      const group = btn.closest('.filter-group');
+      group?.querySelectorAll('.filter-chip').forEach((b) => {
+        const active = b === btn;
+        b.setAttribute('aria-pressed', String(active));
+        b.classList.toggle('active', active);
+      });
+
+      applyFilters();
+    });
+  });
+
+  // Run on load
+  applyFilters();
+</script>

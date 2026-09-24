@@ -1,0 +1,22 @@
+name: Loki
+sex: male
+color: Lilac fawn
+birthDate: "2026-07-18"
+readyDate: "2026-09-18"
+status: available
+price: 1200
+gallery:
+  - /images/puppies/loki/loki-1.jpg
+  - /images/puppies/loki/loki-2.jpg
+  - /images/puppies/loki/loki-3.jpg
+  - /images/puppies/loki/loki-4.jpg
+  - /images/puppies/loki/loki-5.jpg
+  - /images/puppies/loki/loki-6.jpg
+  - /images/puppies/loki/loki-7.jpg
+  - /images/puppies/loki/loki-8.jpg
+  - /images/puppies/loki/loki-9.jpg
+note: "Loki is an adventurous little boy with stunning lilac coloring. He is confident, loving, and full of energy."
+vetExamDate: "2026-09-03"
+vaccinationDate: "2026-08-22"
+dewormingDate: "2026-08-03"
+healthCertificateAvailable: true

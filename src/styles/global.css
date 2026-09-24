@@ -1,0 +1,453 @@
+@import "tailwindcss";
+@import "@fontsource-variable/figtree";
+
+/* ─── Design tokens ─── */
+@theme {
+  /* Colors */
+  --color-warm-white:   #FFFBF5;
+  --color-sand:         #F6EBDD;
+  --color-butter:       #FFF1CC;
+  --color-marigold:     #F2A93B;
+  --color-marigold-deep:#E39A26;
+  --color-ink:          #2A2320;
+  --color-stone:        #6E625A;
+  --color-line:         #EADFD0;
+  --color-sage:         #4E8B62;
+
+  /* Status pill backgrounds / text */
+  --color-status-available-bg:   #E3F0E6;
+  --color-status-available-text: #2F5E40;
+  --color-status-reserved-bg:    #FFF1CC;
+  --color-status-reserved-text:  #7A5300;
+  --color-status-sold-bg:        #EFE7DC;
+  --color-status-sold-text:      #6E625A;
+
+  /* Typography */
+  --font-sans: 'Figtree Variable', 'Figtree', ui-sans-serif, system-ui, sans-serif;
+
+  /* Border radius */
+  --radius-input:  12px;
+  --radius-card:   20px;
+  --radius-pill:   999px;
+
+  /* Shadows */
+  --shadow-bar: 0 8px 24px rgba(42, 35, 32, 0.08);
+}
+
+/* ─── Base ─── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: var(--font-sans);
+  background-color: var(--color-warm-white);
+  color: var(--color-ink);
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100svh;
+  font-size: 1.0625rem; /* 17px */
+  line-height: 1.647; /* ~28px */
+  font-weight: 400;
+  color: var(--color-ink);
+  background-color: var(--color-warm-white);
+}
+
+/* Prevent iOS input zoom (body never below 16px) */
+input,
+select,
+textarea {
+  font-size: 1rem;
+  font-family: var(--font-sans);
+}
+
+/* Focus ring — visible, on-brand */
+:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .hero-image {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+}
+
+/* Hero image fade-in — one page-load moment only */
+@keyframes heroFade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.hero-image {
+  animation: heroFade 600ms ease-out both;
+}
+
+/* ─── Typography ─── */
+h1, h2, h3, h4 {
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+  margin-top: 0;
+}
+
+h1 {
+  font-size: clamp(2.25rem, 5vw, 3.5rem); /* 36→56px */
+  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem); /* 28→40px */
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+h3 {
+  font-size: clamp(1.25rem, 2vw, 1.5rem); /* 20→24px */
+  line-height: 1.35;
+  font-weight: 600;
+}
+
+p {
+  margin-top: 0;
+  max-width: 65ch;
+}
+
+/* ─── Layout ─── */
+.container {
+  width: 100%;
+  max-width: 1120px;
+  margin-inline: auto;
+  padding-inline: 20px;
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding-inline: 32px;
+  }
+}
+
+.section {
+  padding-block: 64px;
+}
+
+@media (min-width: 1024px) {
+  .section {
+    padding-block: 112px;
+  }
+}
+
+/* ─── Buttons ─── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 12px 24px;
+  border-radius: var(--radius-input);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: background-color 200ms ease-out, transform 200ms ease-out;
+  white-space: nowrap;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn-primary {
+  background-color: var(--color-marigold);
+  color: var(--color-ink);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-marigold-deep);
+}
+
+.btn-ghost {
+  background-color: transparent;
+  color: var(--color-ink);
+  border: 1.5px solid var(--color-line);
+}
+
+.btn-ghost:hover {
+  border-color: var(--color-stone);
+}
+
+.btn-text {
+  background: none;
+  color: var(--color-ink);
+  padding: 12px 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ─── Status pills ─── */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.pill-available {
+  background-color: var(--color-status-available-bg);
+  color: var(--color-status-available-text);
+}
+
+.pill-reserved {
+  background-color: var(--color-status-reserved-bg);
+  color: var(--color-status-reserved-text);
+}
+
+.pill-sold {
+  background-color: var(--color-status-sold-bg);
+  color: var(--color-status-sold-text);
+}
+
+/* ─── Cards ─── */
+.card {
+  border-radius: var(--radius-card);
+  border: 1px solid var(--color-line);
+  overflow: hidden;
+  background-color: var(--color-warm-white);
+  transition: border-color 200ms ease-out;
+}
+
+.card:hover {
+  border-color: var(--color-stone);
+}
+
+/* ─── Form elements ─── */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field label {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1.5px solid var(--color-line);
+  border-radius: var(--radius-input);
+  background: var(--color-warm-white);
+  color: var(--color-ink);
+  font-size: 1rem;
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  transition: border-color 200ms ease-out;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: var(--color-ink);
+  outline: none;
+}
+
+.field input[aria-invalid="true"],
+.field select[aria-invalid="true"],
+.field textarea[aria-invalid="true"] {
+  border-color: #C0392B;
+}
+
+.field-error {
+  font-size: 0.875rem;
+  color: #C0392B;
+  display: none;
+}
+
+.field-error.visible {
+  display: block;
+}
+
+/* ─── Health block ─── */
+.health-block {
+  background-color: var(--color-butter);
+  border-radius: var(--radius-card);
+  border: 1px solid var(--color-line);
+  padding: 32px 24px;
+}
+
+@media (min-width: 640px) {
+  .health-block {
+    padding: 48px;
+  }
+}
+
+.health-check-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: rgba(78, 139, 98, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ─── Puppy gallery ─── */
+.gallery-rail {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  gap: 0;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.gallery-rail::-webkit-scrollbar {
+  display: none;
+}
+
+.gallery-rail > * {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+}
+
+/* ─── Sticky bottom bar (puppy page) ─── */
+.sticky-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--color-warm-white);
+  border-top: 1px solid var(--color-line);
+  box-shadow: var(--shadow-bar);
+  padding: 12px 20px;
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  z-index: 40;
+}
+
+@media (min-width: 768px) {
+  .sticky-bar {
+    display: none;
+  }
+}
+
+/* ─── Filter chips ─── */
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  min-height: 40px;
+  border: 1.5px solid var(--color-line);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--color-stone);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: border-color 200ms ease-out, background 200ms ease-out, color 200ms ease-out;
+  white-space: nowrap;
+}
+
+.filter-chip[aria-pressed="true"],
+.filter-chip.active {
+  border-color: var(--color-ink);
+  background: var(--color-ink);
+  color: var(--color-warm-white);
+}
+
+/* ─── Sand section background ─── */
+.bg-sand {
+  background-color: var(--color-sand);
+}
+
+/* ─── Divider ─── */
+.divider {
+  border: none;
+  border-top: 1px solid var(--color-line);
+  margin: 0;
+}
+
+/* ─── Step numbers ─── */
+.step-number {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--color-marigold);
+  color: var(--color-ink);
+  font-weight: 700;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ─── Prose (legal, detail pages) ─── */
+.prose {
+  color: var(--color-ink);
+  max-width: 65ch;
+}
+
+.prose h2 {
+  font-size: 1.375rem;
+  margin-top: 2em;
+  margin-bottom: 0.5em;
+}
+
+.prose p {
+  margin-bottom: 1em;
+  line-height: 1.7;
+}
+
+.prose ul {
+  padding-left: 1.25em;
+  margin-bottom: 1em;
+}
+
+.prose li {
+  margin-bottom: 0.375em;
+  line-height: 1.6;
+}
+
+.prose a {
+  color: var(--color-ink);
+  text-underline-offset: 3px;
+}

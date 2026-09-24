@@ -1,0 +1,184 @@
+---
+/**
+ * The signature "Included with every puppy" health block.
+ * When puppy prop is supplied, each row shows real dates.
+ * When omitted, it shows the generic marketing version.
+ */
+import config from '../../site.config';
+
+interface PuppyHealthData {
+  vaccinationDate?: string;
+  dewormingDate?: string;
+  vetExamDate?: string;
+  healthCertificateAvailable?: boolean;
+}
+
+export interface Props {
+  puppy?: PuppyHealthData;
+  showCta?: boolean;
+  showPrice?: boolean;
+}
+
+const { puppy, showCta = true, showPrice = true } = Astro.props;
+
+function formatDate(iso?: string): string {
+  if (!iso) return '';
+  const d = new Date(iso + 'T00:00:00');
+  return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+}
+
+const items = [
+  {
+    label: 'Vaccinated',
+    line: puppy?.vaccinationDate
+      ? `Up to date as of ${formatDate(puppy.vaccinationDate)}.`
+      : 'Up to date for their age.',
+    checked: puppy ? !!puppy.vaccinationDate : true,
+  },
+  {
+    label: 'Dewormed',
+    line: puppy?.dewormingDate
+      ? `Treated on ${formatDate(puppy.dewormingDate)}.`
+      : 'Treated on schedule.',
+    checked: puppy ? !!puppy.dewormingDate : true,
+  },
+  {
+    label: 'Microchipped',
+    line: 'Every puppy is chipped before going home.',
+    checked: true,
+  },
+  {
+    label: 'Health certificate',
+    line: puppy
+      ? (puppy.healthCertificateAvailable ? 'Available on request.' : 'Contact us for details.')
+      : 'Available on request.',
+    checked: puppy ? !!puppy.healthCertificateAvailable : true,
+  },
+  {
+    label: 'Registration included',
+    line: `Discuss registration details with us directly.`,
+    checked: true,
+  },
+  {
+    label: 'Veterinary exam',
+    line: puppy?.vetExamDate
+      ? `Examined by a licensed vet on ${formatDate(puppy.vetExamDate)}.`
+      : 'Checked by a licensed vet.',
+    checked: puppy ? !!puppy.vetExamDate : true,
+  },
+];
+---
+
+<div class="health-block">
+  <h2 class="health-title">Included with every puppy</h2>
+
+  <div class="health-grid">
+    {items.map((item) => (
+      <div class={`health-row ${!item.checked ? 'health-row--unchecked' : ''}`}>
+        <div class="health-check-icon" aria-hidden="true">
+          {item.checked ? (
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path
+                d="M3 8l3.5 3.5L13 5"
+                stroke="#4E8B62"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          ) : (
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+              <circle cx="7" cy="7" r="5" stroke="#6E625A" stroke-width="1.5" />
+            </svg>
+          )}
+        </div>
+        <div>
+          <p class="health-label">{item.label}</p>
+          <p class="health-line">{item.line}</p>
+        </div>
+      </div>
+    ))}
+  </div>
+
+  {showPrice && (
+    <div class="health-price-block">
+      <p class="health-price">${config.price.toLocaleString('en-US')} each</p>
+      <p class="health-price-note">Everything above is included in the price.</p>
+    </div>
+  )}
+
+  {showCta && (
+    <a href="/puppies" class="btn btn-primary health-cta">
+      See available puppies
+    </a>
+  )}
+</div>
+
+<style>
+  .health-title {
+    font-size: 1.375rem;
+    font-weight: 700;
+    color: var(--color-ink);
+    margin-bottom: 28px;
+  }
+
+  .health-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  @media (min-width: 640px) {
+    .health-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 24px 32px;
+    }
+  }
+
+  .health-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .health-row--unchecked {
+    opacity: 0.55;
+  }
+
+  .health-label {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-ink);
+    margin-bottom: 2px;
+  }
+
+  .health-line {
+    font-size: 0.9375rem;
+    color: var(--color-stone);
+    margin: 0;
+  }
+
+  .health-price-block {
+    margin-top: 32px;
+    padding-top: 28px;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .health-price {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-ink);
+    letter-spacing: -0.02em;
+    margin-bottom: 4px;
+  }
+
+  .health-price-note {
+    font-size: 0.9375rem;
+    color: var(--color-stone);
+    margin: 0;
+  }
+
+  .health-cta {
+    margin-top: 24px;
+  }
+</style>

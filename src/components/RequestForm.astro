@@ -1,0 +1,379 @@
+---
+export interface Props {
+  prefillPuppy?: string;
+  puppyOptions?: { slug: string; name: string }[];
+}
+
+const { prefillPuppy, puppyOptions = [] } = Astro.props;
+---
+
+<div class="form-wrap" id="reserve">
+  <form
+    id="reserve-form"
+    class="reserve-form"
+    novalidate
+    autocomplete="on"
+    aria-label="Reserve a puppy"
+  >
+    <!-- Honeypot — bots fill this, humans don't -->
+    <div class="visually-hidden" aria-hidden="true">
+      <label for="website">Leave this blank</label>
+      <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
+    </div>
+
+    <div class="form-row">
+      <div class="field">
+        <label for="fname">Your name</label>
+        <input
+          type="text"
+          id="fname"
+          name="name"
+          autocomplete="name"
+          required
+          aria-required="true"
+          aria-describedby="fname-error"
+          placeholder="Jane Smith"
+        />
+        <span class="field-error" id="fname-error" role="alert">Please enter your name.</span>
+      </div>
+    </div>
+
+    <div class="form-row form-row--2">
+      <div class="field">
+        <label for="email">Email address</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          autocomplete="email"
+          required
+          aria-required="true"
+          aria-describedby="email-error"
+          placeholder="jane@example.com"
+          inputmode="email"
+        />
+        <span class="field-error" id="email-error" role="alert">Please enter a valid email address.</span>
+      </div>
+      <div class="field">
+        <label for="phone">Phone number</label>
+        <input
+          type="tel"
+          id="phone"
+          name="phone"
+          autocomplete="tel"
+          required
+          aria-required="true"
+          aria-describedby="phone-error"
+          placeholder="+1 (555) 000-0000"
+          inputmode="tel"
+        />
+        <span class="field-error" id="phone-error" role="alert">Please enter your phone number.</span>
+      </div>
+    </div>
+
+    <div class="form-row form-row--2">
+      <div class="field">
+        <label for="country">Country</label>
+        <select id="country" name="country" autocomplete="country" required aria-required="true" aria-describedby="country-error">
+          <option value="" disabled selected>Select country</option>
+          <option value="US">United States</option>
+          <option value="CA">Canada</option>
+        </select>
+        <span class="field-error" id="country-error" role="alert">Please select your country.</span>
+      </div>
+      <div class="field">
+        <label for="state">State or province</label>
+        <input
+          type="text"
+          id="state"
+          name="state"
+          autocomplete="address-level1"
+          required
+          aria-required="true"
+          aria-describedby="state-error"
+          placeholder="e.g. California, Ontario"
+        />
+        <span class="field-error" id="state-error" role="alert">Please enter your state or province.</span>
+      </div>
+    </div>
+
+    {puppyOptions.length > 0 && (
+      <div class="form-row">
+        <div class="field">
+          <label for="puppy">Which puppy are you interested in?</label>
+          <select id="puppy" name="puppy">
+            <option value="">No preference / ask us</option>
+            {puppyOptions.map((p) => (
+              <option value={p.slug} selected={p.slug === prefillPuppy}>{p.name}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+    )}
+
+    {prefillPuppy && puppyOptions.length === 0 && (
+      <input type="hidden" name="puppy" value={prefillPuppy} />
+    )}
+
+    <div class="form-row">
+      <div class="field">
+        <label for="message">Anything else you want to share? <span class="field-optional">(optional)</span></label>
+        <textarea
+          id="message"
+          name="message"
+          rows="4"
+          autocomplete="off"
+          placeholder="Tell us a little about your home, family, or any questions you have."
+          aria-describedby="message-hint"
+        ></textarea>
+        <span class="field-hint" id="message-hint">No need to ask about price or availability here — we will cover everything on the call.</span>
+      </div>
+    </div>
+
+    <div class="form-submit">
+      <button type="submit" class="btn btn-primary form-submit-btn" id="submit-btn">
+        Send request
+      </button>
+      <p class="form-submit-note">
+        We never ask for money before a video call. No CAPTCHA — your message goes straight to us.
+      </p>
+    </div>
+
+    <!-- Success state (hidden until form submits) -->
+    <div class="form-success" id="form-success" aria-live="polite" hidden>
+      <div class="form-success-inner">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <circle cx="16" cy="16" r="15" stroke="#4E8B62" stroke-width="2" />
+          <path d="M10 16l4 4 8-8" stroke="#4E8B62" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <div>
+          <p class="form-success-title">Request sent.</p>
+          <p class="form-success-body" id="form-success-body">We will be in touch soon.</p>
+          <p class="form-success-next">
+            Next, watch your inbox. We will confirm receipt and schedule a video call so you can meet your puppy in real time.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Error state -->
+    <div class="form-error-msg" id="form-error-msg" aria-live="polite" hidden>
+      <p>Something went wrong. Please try again, or text or call us directly.</p>
+    </div>
+  </form>
+</div>
+
+<style>
+  .form-wrap {
+    max-width: 600px;
+  }
+
+  .reserve-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .form-row--2 {
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 480px) {
+    .form-row--2 {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .field-optional {
+    font-weight: 400;
+    color: var(--color-stone);
+    font-size: 0.875rem;
+  }
+
+  .field-hint {
+    font-size: 0.8125rem;
+    color: var(--color-stone);
+    margin-top: 4px;
+    display: block;
+  }
+
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 6l4 4 4-4' stroke='%236E625A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 40px;
+    cursor: pointer;
+  }
+
+  .form-submit {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .form-submit-btn {
+    align-self: flex-start;
+    min-width: 160px;
+  }
+
+  .form-submit-note {
+    font-size: 0.8125rem;
+    color: var(--color-stone);
+    margin: 0;
+    max-width: 50ch;
+    line-height: 1.55;
+  }
+
+  .form-success {
+    padding: 24px;
+    background: #E3F0E6;
+    border-radius: var(--radius-card);
+    border: 1px solid #B2D4BB;
+  }
+
+  .form-success-inner {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .form-success-title {
+    font-weight: 700;
+    font-size: 1.0625rem;
+    color: var(--color-ink);
+    margin-bottom: 4px;
+  }
+
+  .form-success-body {
+    color: var(--color-stone);
+    margin-bottom: 8px;
+    font-size: 0.9375rem;
+  }
+
+  .form-success-next {
+    font-size: 0.875rem;
+    color: var(--color-stone);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .form-error-msg {
+    padding: 16px 20px;
+    background: #FFF0EE;
+    border-radius: var(--radius-input);
+    border: 1px solid #F5C6C0;
+    color: #8B2500;
+    font-size: 0.9375rem;
+  }
+
+  .form-error-msg p {
+    margin: 0;
+  }
+
+  .form-submit-btn[aria-busy="true"] {
+    opacity: 0.7;
+    pointer-events: none;
+  }
+</style>
+
+<script>
+  const form = document.getElementById('reserve-form') as HTMLFormElement | null;
+  const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement | null;
+  const successEl = document.getElementById('form-success') as HTMLElement | null;
+  const errorEl = document.getElementById('form-error-msg') as HTMLElement | null;
+  const successBody = document.getElementById('form-success-body') as HTMLElement | null;
+
+  // Simple client-side validation
+  function validateField(input: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement): boolean {
+    if (!input.required) return true;
+    const valid = input.checkValidity() && input.value.trim() !== '';
+    const errorEl = document.getElementById(`${input.id}-error`);
+    if (errorEl) {
+      errorEl.classList.toggle('visible', !valid);
+    }
+    input.setAttribute('aria-invalid', String(!valid));
+    return valid;
+  }
+
+  // Validate all required fields on submit
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!form) return;
+
+    // Honeypot check
+    const honeypot = form.querySelector<HTMLInputElement>('[name="website"]');
+    if (honeypot?.value) return; // silently do nothing
+
+    const inputs = form.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>(
+      'input[required], select[required], textarea[required]'
+    );
+
+    let allValid = true;
+    inputs.forEach((input) => {
+      if (!validateField(input)) allValid = false;
+    });
+
+    if (!allValid) {
+      // Focus first invalid field
+      const firstInvalid = form.querySelector<HTMLElement>('[aria-invalid="true"]');
+      firstInvalid?.focus();
+      return;
+    }
+
+    // Submit
+    submitBtn?.setAttribute('aria-busy', 'true');
+    if (submitBtn) submitBtn.textContent = 'Sending...';
+
+    const data = Object.fromEntries(new FormData(form).entries());
+
+    try {
+      const res = await fetch('/api/reserve', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      if (res.ok) {
+        form.style.display = 'none';
+        if (successEl) {
+          successEl.hidden = false;
+          if (successBody) {
+            const email = (data.email as string) || '';
+            successBody.textContent = email
+              ? `We will reply to ${email} soon.`
+              : 'We will be in touch soon.';
+          }
+          successEl.focus();
+        }
+      } else {
+        throw new Error('Server error');
+      }
+    } catch {
+      if (errorEl) {
+        errorEl.hidden = false;
+      }
+      submitBtn?.removeAttribute('aria-busy');
+      if (submitBtn) submitBtn.textContent = 'Send request';
+    }
+  });
+
+  // Validate on blur (live feedback)
+  form?.querySelectorAll<HTMLInputElement | HTMLSelectElement>('input[required], select[required]').forEach((input) => {
+    input.addEventListener('blur', () => validateField(input));
+  });
+</script>

@@ -1,0 +1,92 @@
+---
+import Layout from '../layouts/Layout.astro';
+import config from '../../site.config';
+---
+
+<Layout
+  title="Privacy and terms"
+  description="Privacy policy and terms of use for carterfrenchbulls.com"
+  noIndex={false}
+>
+  <section class="section">
+    <div class="container">
+      <div class="prose">
+        <h1>Privacy and terms</h1>
+        <p><em>Last updated: September 2026. PLACEHOLDER — review with a lawyer before launch.</em></p>
+
+        <h2>Privacy policy</h2>
+
+        <h2>What we collect</h2>
+        <p>
+          When you submit the reservation request form, we collect your name, email address, phone number,
+          country, and state or province. You may also share a message with us. We use this information
+          only to respond to your inquiry and to follow up about a puppy.
+        </p>
+
+        <h2>How we use it</h2>
+        <p>
+          We do not sell your information. We do not share it with third parties except for the
+          email delivery service we use to forward your request to us ({config.kennelName}).
+          We keep your information only as long as needed to complete the conversation.
+        </p>
+
+        <h2>Cookies</h2>
+        <p>
+          This site does not use advertising cookies or third-party tracking cookies.
+          We may use a session cookie to protect the contact form from automated spam.
+        </p>
+
+        <h2>Your rights</h2>
+        <p>
+          You may ask us to delete any personal information you have shared with us.
+          Contact us at {config.email !== '{{EMAIL}}' ? config.email : '[email — to be added]'} and we will
+          respond within a reasonable time.
+        </p>
+
+        <hr style="margin: 48px 0; border: none; border-top: 1px solid var(--color-line);" />
+
+        <h2>Terms of use</h2>
+        <p>
+          This website is operated by {config.kennelName}. By using this site, you agree to these terms.
+        </p>
+
+        <h2>Accuracy of information</h2>
+        <p>
+          We make reasonable efforts to keep puppy listings, prices, and availability up to date.
+          Listings are subject to change without notice. Confirming details directly with us before
+          making any decisions is always the right move.
+        </p>
+
+        <h2>No guarantees</h2>
+        <p>
+          Viewing a listing on this site does not reserve a puppy. A puppy is held only after a
+          deposit is received and a written agreement is signed.
+        </p>
+
+        <h2>No liability</h2>
+        <p>
+          {config.kennelName} is not liable for any indirect, incidental, or consequential
+          damages arising from your use of this site or from the purchase of a puppy.
+          This does not limit any statutory rights you may have as a consumer.
+        </p>
+
+        <h2>Contact</h2>
+        <p>
+          Questions about these terms or our privacy practices? Reach us at{' '}
+          {config.email !== '{{EMAIL}}' ? (
+            <a href={`mailto:${config.email}`}>{config.email}</a>
+          ) : (
+            '[email — to be added]'
+          )}.
+        </p>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .prose {
+    max-width: 68ch;
+    padding-bottom: 80px;
+  }
+</style>

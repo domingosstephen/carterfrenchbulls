@@ -1,0 +1,74 @@
+---
+import config from '../../site.config';
+
+const steps = [
+  {
+    n: 1,
+    title: 'Pick a puppy and send a request.',
+    body: 'Browse our available puppies and send us a short message. Tell us a little about your home and which puppy you love.',
+  },
+  {
+    n: 2,
+    title: 'We reply and set up a video call.',
+    body: `We reply ${config.responseTime !== '{{RESPONSE_TIME}}' ? config.responseTime : 'promptly'} and schedule a live video call so you can meet your puppy in real time and ask any questions.`,
+  },
+  {
+    n: 3,
+    title: 'Reserve with a deposit and sign the agreement.',
+    body: `A ${config.deposit !== '{{DEPOSIT}}' ? config.deposit : 'deposit'} holds your puppy. We will send a written agreement that covers everything before any money changes hands.`,
+  },
+  {
+    n: 4,
+    title: 'Your puppy comes home.',
+    body: `${config.deliveryOptions !== '{{DELIVERY_OPTIONS}}' ? config.deliveryOptions + '.' : 'We will discuss pickup and delivery options with you directly.'}`,
+  },
+];
+---
+
+<ol class="hiw-list" role="list">
+  {steps.map((step) => (
+    <li class="hiw-step">
+      <div class="step-number" aria-hidden="true">{step.n}</div>
+      <div class="hiw-content">
+        <h3 class="hiw-title">{step.title}</h3>
+        <p class="hiw-body">{step.body}</p>
+      </div>
+    </li>
+  ))}
+</ol>
+
+<style>
+  .hiw-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .hiw-step {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+
+  .hiw-content {
+    padding-top: 6px;
+  }
+
+  .hiw-title {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--color-ink);
+    margin-bottom: 6px;
+  }
+
+  .hiw-body {
+    font-size: 0.9375rem;
+    color: var(--color-stone);
+    margin: 0;
+    max-width: 52ch;
+    line-height: 1.65;
+  }
+</style>

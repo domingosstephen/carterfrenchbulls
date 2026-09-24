@@ -1,0 +1,180 @@
+---
+import Layout from '../layouts/Layout.astro';
+import HealthBlock from '../components/HealthBlock.astro';
+---
+
+<Layout
+  title="Health"
+  description="Every Carter French Bulls puppy comes vaccinated, dewormed, microchipped, and vet-checked. Here is what each item means."
+>
+  <section class="section">
+    <div class="container">
+      <div class="page-intro">
+        <h1>What comes with every puppy</h1>
+        <p>
+          Six things come included with every puppy we place. This is not a marketing promise —
+          it is a factual list of what we do before any puppy goes home.
+        </p>
+      </div>
+
+      <div class="health-block-wrap">
+        <HealthBlock showCta={true} showPrice={true} />
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-sand">
+    <div class="container health-detail-grid">
+
+      <div class="health-detail-item">
+        <h2>Vaccinated</h2>
+        <p>
+          Each puppy receives the appropriate vaccines for their age before going home.
+          The vaccination record comes with your puppy so your vet can continue the schedule.
+        </p>
+        <p>
+          Puppies under 16 weeks typically receive their first combination vaccines.
+          Your vet will advise on the next boosters.
+        </p>
+      </div>
+
+      <div class="health-detail-item">
+        <h2>Dewormed</h2>
+        <p>
+          Puppies are dewormed on a regular schedule starting at two weeks of age.
+          This is standard care for any well-raised puppy and is part of what we do before placement.
+        </p>
+      </div>
+
+      <div class="health-detail-item">
+        <h2>Microchipped</h2>
+        <p>
+          Every puppy is microchipped before leaving us. This is a permanent form of identification that
+          cannot fall off or wear out. Keep your contact information updated with the chip registry.
+        </p>
+      </div>
+
+      <div class="health-detail-item">
+        <h2>Health certificate</h2>
+        <p>
+          A health certificate from a licensed veterinarian is available on request.
+          This document is often required for travel, especially if your puppy is flying.
+          Ask us about timing when you reserve.
+        </p>
+        <a href="/contact#reserve" class="btn btn-ghost" style="margin-top:8px">
+          Ask for the health certificate
+        </a>
+      </div>
+
+      <div class="health-detail-item">
+        <h2>Registration included</h2>
+        <p>
+          Registration varies by litter. We will discuss the specific registration for your puppy
+          directly — every puppy's situation is a little different, and we want to give you
+          accurate information rather than a blanket claim.
+        </p>
+      </div>
+
+      <div class="health-detail-item">
+        <h2>Veterinary exam</h2>
+        <p>
+          A licensed veterinarian examines each puppy before they go home.
+          The exam date is recorded in each puppy's profile on this site.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container trust-note">
+      <h2>How to protect yourself</h2>
+      <div class="trust-box">
+        <p>
+          Puppy scams are real, and we take them seriously. Here is how to stay safe when buying
+          any puppy from any source:
+        </p>
+        <ul>
+          <li>We never ask for payment before a video call where you see the puppy live.</li>
+          <li>We will never ask you to send money by gift card or wire transfer without a signed agreement.</li>
+          <li>If you see our photos used on another site with a different contact, that is fraud. Report it.</li>
+          <li>Always ask for a video call. Any reputable breeder will say yes.</li>
+        </ul>
+        <p>
+          If you have any doubts, call us. We would rather lose a sale than have someone get scammed.
+        </p>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .page-intro {
+    max-width: 60ch;
+    margin-bottom: 48px;
+  }
+
+  .page-intro p {
+    color: var(--color-stone);
+    font-size: 1.0625rem;
+  }
+
+  .health-block-wrap {
+    max-width: 800px;
+  }
+
+  .health-detail-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  @media (min-width: 640px) {
+    .health-detail-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+    }
+  }
+
+  .health-detail-item h2 {
+    font-size: 1.125rem;
+    margin-bottom: 10px;
+  }
+
+  .health-detail-item p {
+    color: var(--color-stone);
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    margin-bottom: 12px;
+  }
+
+  .trust-note {
+    max-width: 680px;
+  }
+
+  .trust-box {
+    padding: 28px 32px;
+    background: var(--color-butter);
+    border-radius: var(--radius-card);
+    border: 1px solid var(--color-line);
+  }
+
+  .trust-box p {
+    color: var(--color-stone);
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    margin-bottom: 12px;
+  }
+
+  .trust-box ul {
+    padding-left: 20px;
+    margin-bottom: 16px;
+  }
+
+  .trust-box li {
+    color: var(--color-stone);
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    margin-bottom: 8px;
+  }
+</style>
