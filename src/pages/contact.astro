@@ -8,20 +8,18 @@ const puppies = await getCollection('puppies');
 const availablePuppies = puppies
   .filter((p) => p.data.status === 'available')
   .map((p) => ({ slug: p.id, name: p.data.name }));
-
-// Pre-select puppy if ?puppy= is in URL (handled client-side via JS)
 ---
 
 <Layout
   title="Contact"
-  description="Send a reservation request to Carter French Bulls. We reply promptly and set up a video call before anything else."
+  description="Send a reservation request to Carter French Bulls. We reply promptly and answer any questions you have."
 >
   <section class="section">
     <div class="container contact-layout">
       <div class="contact-main">
         <h1 id="reserve">Send a request</h1>
         <p class="contact-sub">
-          Fill in the form below and we will be in touch to schedule a video call.
+          Fill in the form below and we will get back to you.
           No commitment, no payment — just a conversation.
         </p>
 
@@ -54,9 +52,9 @@ const availablePuppies = puppies
           <div class="contact-trust-note">
             <h3>Stay safe</h3>
             <p>
-              We never ask for money before a video call. We will not ask you to
-              pay by gift card or wire transfer without a signed agreement.
-              If something feels off, call us to verify before sending anything.
+              We never ask for payment without a signed agreement first.
+              We will not ask you to pay by gift card or wire transfer.
+              If something feels off, reach out to us directly to verify.
             </p>
           </div>
         </div>

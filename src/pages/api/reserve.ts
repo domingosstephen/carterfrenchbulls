@@ -106,13 +106,13 @@ export const POST: APIRoute = async ({ request }) => {
 
   const visitorEmailHtml = `
     <p>Hi ${escHtml(body.name)},</p>
-    <p>Thank you for reaching out to Carter French Bulls. We received your request and will reply soon to schedule a video call.</p>
+    <p>Thank you for reaching out to Carter French Bulls. We received your request and will reply soon.</p>
     ${body.puppy ? `<p>You expressed interest in: <strong>${escHtml(body.puppy)}</strong></p>` : ''}
     <p>What happens next:</p>
     <ol>
-      <li>We review your request and reach out to schedule a quick video call.</li>
-      <li>On the call, you meet the puppy in real time and ask any questions.</li>
-      <li>If it feels like the right fit, we move forward from there — no pressure.</li>
+      <li>We review your request and reply with any information you need.</li>
+      <li>When you are ready, a deposit holds the puppy and we send a written agreement.</li>
+      <li>Your puppy comes home — pickup or delivery, we sort out the details together.</li>
     </ol>
     <p>If you have urgent questions in the meantime, reply to this email or text us directly.</p>
     <p>Talk soon,<br />Sandy Carter<br />Carter French Bulls</p>

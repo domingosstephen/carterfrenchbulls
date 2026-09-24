@@ -9,12 +9,12 @@ const faqs = [
     a: `We reply ${config.responseTime !== '{{RESPONSE_TIME}}' ? config.responseTime : 'as soon as we can'}. If you send a message over a weekend, expect a reply by Monday morning.`,
   },
   {
-    q: 'Do I have to pay before the video call?',
-    a: 'No. The video call comes first, always. We never ask for money before you have seen your puppy live on screen and had your questions answered.',
+    q: 'Do I have to pay a deposit right away?',
+    a: 'No. Send us a message first and we will answer your questions. Once you are ready, a deposit holds the puppy while we prepare the paperwork.',
   },
   {
     q: 'What does the deposit hold?',
-    a: `The deposit takes the puppy off the market while we prepare the paperwork. ${config.deposit !== '{{DEPOSIT}}' ? 'It is ' + config.deposit + '.' : 'The amount will be confirmed during your video call.'} Once you sign the agreement, we count down the days until your puppy comes home.`,
+    a: `The deposit takes the puppy off the market while we prepare the paperwork. ${config.deposit !== '{{DEPOSIT}}' ? 'It is ' + config.deposit + '.' : 'The amount will be confirmed when we reply.'} Once you sign the agreement, we count down the days until your puppy comes home.`,
   },
   {
     q: 'What is in the purchase agreement?',
@@ -48,9 +48,8 @@ const faqs = [
           <div class="hiw-aside-box">
             <h3>Before you send money</h3>
             <p>
-              We schedule a video call so you can see your puppy in real time.
-              No exceptions. This protects you from scams and helps us make sure
-              our puppy is going to the right home.
+              We answer your questions first. Only when you are comfortable and ready
+              do we move to a deposit and a written agreement.
             </p>
           </div>
         </div>
